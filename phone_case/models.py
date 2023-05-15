@@ -21,6 +21,7 @@ class PhoneCase(TimestampedModel):
     class Meta:
         verbose_name = "PhoneCase"
         verbose_name_plural = "PhoneCases"
+        ordering = ["-created_at"]
 
     def __str__(self):
         return f"{self.name}"
