@@ -6,7 +6,14 @@ from .models import PhoneCase
 
 
 class PhoneCaseSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = PhoneCase
         fields = "__all__"
+
+
+class UpdatePhoneCaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PhoneCase
+        fields = "__all__"
+        read_only_fields = ["id", "stock", "brand", "model"]
+
