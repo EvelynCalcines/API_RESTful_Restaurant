@@ -5,7 +5,7 @@ import uuid
 from django.db import models
 
 # waning_moon_design imports
-from utils.models import TimestampedModel
+from utils.models import BaseModel
 
 
 class ColorType(models.TextChoices):
@@ -29,13 +29,13 @@ class ColorType(models.TextChoices):
         return {choice.value: choice.label for choice in cls}
 
 
-class PhoneCase(TimestampedModel):
+class PhoneCase(BaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     stock = models.IntegerField()
     name = models.CharField(max_length=20)
     brand = models.CharField(max_length=255)
     model = models.CharField(max_length=255)
-    color = models.CharField(max_length=255)
+    color = models.CharField(max_length=255, choices=ColorType.choices)
     phrase = models.CharField(max_length=255)
     design = models.TextField()
 
