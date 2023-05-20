@@ -8,6 +8,27 @@ from django.db import models
 from utils.models import TimestampedModel
 
 
+class ColorType(models.TextChoices):
+    RED = "R", "Rojo"
+    BLUE = "Az", "Azul"
+    YELLOW = "Am", "Amarillo"
+    BLACK = "N", "Negro"
+    BROWN = "M", "Marron"
+    WHITE = "B", "Blanco"
+    PINK = "Rs", "Rosa"
+    GREEN = "V", "Verde"
+    GRAY = "G", "Gris"
+    ORANGE = "Na", "Naranja"
+    PURPLE = "Mo", "Morado"
+    SILVER = "P", "Plateado"
+    GOLDEN = "D", "Dorado"
+    TRANSPARENT = "T", "Transparente"
+
+    @classmethod
+    def get_all_choices(cls):
+        return {choice.value: choice.label for choice in cls}
+
+
 class PhoneCase(TimestampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     stock = models.IntegerField()
