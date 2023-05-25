@@ -35,7 +35,7 @@ class PhoneCase(BaseModel):
     name = models.CharField(max_length=20)
     brand = models.CharField(max_length=255)
     model = models.CharField(max_length=255)
-    color = models.CharField(max_length=255, choices=ColorType.choices)
+    color = models.CharField(max_length=50, choices=ColorType.choices)
     phrase = models.CharField(max_length=255)
     design = models.TextField()
 
