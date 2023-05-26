@@ -26,4 +26,5 @@ urlpatterns = [
 
     url('api/', include('phone_case.urls')),
     url('api/', include('utils.urls')),
+    url('api/', include('authentication.urls')),
 ]
