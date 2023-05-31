@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'phone_case',
-    'authentication'
+    'authentication',
+    'electrical_exercises'
 ]
 
 MIDDLEWARE = [
