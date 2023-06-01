@@ -6,8 +6,7 @@ from .views import TelevisionViewSet, FridgeViewSet
 
 router = SimpleRouter()
 
-router.register(r'Television', TelevisionViewSet, basename="Television")
+router.register(r'television', TelevisionViewSet, basename="television")
 router.register(r'Fridge', FridgeViewSet, basename="Fridge")
 
 urlpatterns = router.urls
-

@@ -3,6 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 
+
 # waning_moon_design imports
 from electrical_exercises.models import Television, Fridge
 from electrical_exercises.serializers import TelevisionSerializer, FridgeSerializer
