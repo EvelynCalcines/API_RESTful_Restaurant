@@ -1,6 +1,8 @@
 # Django and DRF imports
+import django_filters
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
@@ -38,6 +40,16 @@ class UserViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewS
 
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
+    filter_backends = [SearchFilter, OrderingFilter, django_filters.rest_framework.DjangoFilterBackend]
+
+    filterset_fields = {
+        "email": ["icontains", "isnull", "exact", "in"],
+        "phone": ["lt", "lte", "exact", "gte", "gt", "in"],
+        "address": ["icontains", "isnull", "exact", "in"]
+    }
+
+    search_fields = ['first_name', 'last_name']
+    ordering_fields = "__all__"
 
     @action(detail=False, methods=['PUT', 'PATCH', 'GET', 'DELETE'])
     def me(self, request):
