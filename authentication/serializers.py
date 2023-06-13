@@ -14,6 +14,13 @@ class UserSerializer(serializers.ModelSerializer):
         exclude = ['password']
 
 
+class UserProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "email", "phone", "address"]
+
+
 class RegistrationSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(
@@ -39,7 +46,7 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(write_only=True)
     token = serializers.SerializerMethodField()
-    user = UserSerializer(read_only=True)
+    user = UserProfileSerializer(read_only=True)
 
     def get_token(self, obj):
         user = obj['user']
