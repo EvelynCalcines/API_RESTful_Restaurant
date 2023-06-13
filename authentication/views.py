@@ -44,8 +44,8 @@ class UserViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewS
 
     filterset_fields = {
         "email": ["icontains", "isnull", "exact", "in"],
-        "phone": ["lt", "lte", "exact", "gte", "gt", "in"],
-        "address": ["icontains", "isnull", "exact", "in"]
+        "phone": ["icontains", "exact", "in"],
+        "address": ["icontains", "exact", "in"]
     }
 
     search_fields = ['first_name', 'last_name']
