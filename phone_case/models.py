@@ -6,6 +6,7 @@ from django.db import models
 
 # waning_moon_design imports
 from utils.models import BaseModel
+from authentication.models import User
 
 
 class ColorType(models.TextChoices):
@@ -38,6 +39,8 @@ class PhoneCase(BaseModel):
     color = models.CharField(max_length=50, choices=ColorType.choices)
     phrase = models.CharField(max_length=255)
     design = models.TextField()
+    price = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "PhoneCase"
