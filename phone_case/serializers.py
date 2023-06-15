@@ -12,6 +12,15 @@ class ListPhoneCaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PhoneCase
+        exclude = ["created_at", "updated_at", "deleted_at", "active"]
+
+
+class ListProfilePhoneCaseSerializer(serializers.ModelSerializer):
+
+    color = serializers.ChoiceField(choices=ColorType.choices, source='get_color_display')
+
+    class Meta:
+        model = PhoneCase
         fields = "__all__"
 
 
