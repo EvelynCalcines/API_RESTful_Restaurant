@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'django_filters',
     'phone_case',
     'authentication',
-    'electrical_exercises'
+    'electrical_exercises',
+    'exercises2'
 ]
 
 MIDDLEWARE = [
