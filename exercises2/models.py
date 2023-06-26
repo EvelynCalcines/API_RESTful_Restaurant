@@ -53,4 +53,4 @@ class Floor(BaseModel):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"{self.user}"
+        return f"{self.floor} {self.letter}"

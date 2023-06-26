@@ -4,11 +4,12 @@ from rest_framework import mixins, permissions, status
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import GenericViewSet
 
 # waning_moon_design imports
 from exercises2.models import Building, Floor
-from exercises2.serializers import ListBuildingSerializer, ListFloorSerializer, CreateFloorSerializer
+from exercises2.serializers import ListBuildingSerializer, ListFloorSerializer, CreateFloorSerializer, \
+    ListProfileFloorSerializer, UpdateFloorSerializer
 
 
 class BuildingViewSet(mixins.CreateModelMixin,
@@ -36,15 +37,11 @@ class BuildingViewSet(mixins.CreateModelMixin,
         return [permission() for permission in permission_classes]
 
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):  # Permite a todos los métodos de lectura (GET, HEAD, OPTIONS)
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return obj.user == request.user  # (Solo permite modificaciones si el usuario autenticado
-        # es el propietario del piso)
+class FloorViewSet(mixins.CreateModelMixin,
+                   mixins.RetrieveModelMixin,
+                   mixins.ListModelMixin,
+                   GenericViewSet):
 
-
-class FloorViewSet(ModelViewSet):
     queryset = Floor.objects.all()
     serializer_class = ListFloorSerializer
     lookup_field = 'id'
@@ -55,7 +52,6 @@ class FloorViewSet(ModelViewSet):
         "number_bathrooms": ["lt", "lte", "exact", "gte", "gt", "in"],
         "letter": ["icontains", "exact"],
         "floor": ["lt", "lte", "exact", "gte", "gt"],
-        "user": ["icontains", "isnull", "exact", "in"],
         "building": ["icontains", "isnull", "exact", "in"]
 
     }
@@ -75,11 +71,20 @@ class FloorViewSet(ModelViewSet):
             return CreateFloorSerializer
         return self.serializer_class
 
-    def get_permissions(self):
-        if self.action in ['update', 'partial_update', 'destroy']:  # (Requiere autenticación y permiso de
-            # propietario para modificar o eliminar)
-            permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
-        else:
-            permission_classes = [permissions.AllowAny]  # (Permite a cualquier usuario
-            # realizar acciones de creación, listado y recuperación)
-        return [permission() for permission in permission_classes]
+
+class MeFloorView(mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
+                  mixins.ListModelMixin,
+                  GenericViewSet):
+    queryset = Floor.objects.all()
+    serializer_class = ListProfileFloorSerializer
+    lookup_field = "id"
+
+    def get_queryset(self):
+        queryset = self.queryset.filter(user=self.request.user.id)
+        return queryset
+
+    def get_serializer_class(self):
+        if self.action in ("update", "partial_update"):
+            return UpdateFloorSerializer
+        return self.serializer_class

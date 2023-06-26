@@ -1,14 +1,15 @@
 # Django and DRF imports
 from rest_framework import serializers
 
-
 # waning_moon_design imports
 from .models import PhoneCase, ColorType
+from authentication.serializers import UserProfileSerializer
 
 
 class ListPhoneCaseSerializer(serializers.ModelSerializer):
 
     color = serializers.ChoiceField(choices=ColorType.choices, source='get_color_display')
+    user = UserProfileSerializer()
 
     class Meta:
         model = PhoneCase
