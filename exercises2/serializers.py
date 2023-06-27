@@ -47,8 +47,8 @@ class UpdateBuildingSerializer(serializers.ModelSerializer):
 #  A partir de aquí empieza floor.
 
 class ListProfileFloorSerializer(serializers.ModelSerializer):
-    Building = ListBuildingSerializer
-    user = UserProfileSerializer
+    building = ListBuildingSerializer()
+    user = UserProfileSerializer()
 
     class Meta:
         model = Floor
@@ -67,13 +67,6 @@ class CreateFloorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Floor
         fields = "__all__"
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        color_key = representation['color']
-        color_value = dict(ColorType.choices)[color_key]
-        representation['color'] = color_value
-        return representation
 
 
 class UpdateFloorSerializer(serializers.ModelSerializer):

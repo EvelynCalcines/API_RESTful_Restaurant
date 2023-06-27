@@ -4,18 +4,21 @@ from rest_framework import mixins, permissions, status
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 # waning_moon_design imports
 from exercises2.models import Building, Floor
-from exercises2.serializers import ListBuildingSerializer, ListFloorSerializer, CreateFloorSerializer, \
-    ListProfileFloorSerializer, UpdateFloorSerializer
+from exercises2.serializers import (
+    ListBuildingSerializer,
+    ListFloorSerializer,
+    CreateFloorSerializer,
+    ListProfileFloorSerializer,
+    UpdateFloorSerializer,
+    UpdateBuildingSerializer
+)
 
 
-class BuildingViewSet(mixins.CreateModelMixin,
-                      mixins.RetrieveModelMixin,
-                      mixins.ListModelMixin,
-                      GenericViewSet):
+class BuildingViewSet(ModelViewSet):
     queryset = Building.objects.all()
     permission_classes = [AllowAny]
     serializer_class = ListBuildingSerializer
@@ -36,6 +39,11 @@ class BuildingViewSet(mixins.CreateModelMixin,
             permission_classes = [permissions.AllowAny]
         return [permission() for permission in permission_classes]
 
+    def get_serializer_class(self):
+        if self.action in ("update", "partial_update"):
+            return UpdateBuildingSerializer
+        return self.serializer_class
+
 
 class FloorViewSet(mixins.CreateModelMixin,
                    mixins.RetrieveModelMixin,
@@ -43,6 +51,7 @@ class FloorViewSet(mixins.CreateModelMixin,
                    GenericViewSet):
 
     queryset = Floor.objects.all()
+    permission_classes = [AllowAny]
     serializer_class = ListFloorSerializer
     lookup_field = 'id'
     filter_backends = [SearchFilter, OrderingFilter, django_filters.rest_framework.DjangoFilterBackend]
@@ -52,11 +61,19 @@ class FloorViewSet(mixins.CreateModelMixin,
         "number_bathrooms": ["lt", "lte", "exact", "gte", "gt", "in"],
         "letter": ["icontains", "exact"],
         "floor": ["lt", "lte", "exact", "gte", "gt"],
-        "building": ["icontains", "isnull", "exact", "in"]
+        "user": ["exact", "isnull"],
+        "building": ["exact", "in"]
 
     }
     search_fields = ['name', 'user__first_name']
     ordering_fields = ['building__street']
+
+    def get_permissions(self):
+        if self.action == 'create':
+            permission_classes = [permissions.IsAuthenticated]
+        else:
+            permission_classes = [permissions.AllowAny]
+        return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
         request.data['user'] = request.user.id
