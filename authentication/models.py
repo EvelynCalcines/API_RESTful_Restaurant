@@ -39,6 +39,12 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
         related_name="favorites_by"
     )
 
+    comments = models.ManyToManyField(
+        "phone_case.PhoneCase",
+        related_name="comment_by",
+        through="Comment"
+    )
+
     USERNAME_FIELD = 'email'
 
     class Meta:
@@ -57,3 +63,12 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
 
     def is_favorite(self, phonecase):
         return self.favorites.filter(pk=phonecase.id).exists()
+
+
+class Comment(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    phonecase = models.ForeignKey('phone_case.PhoneCase', on_delete=models.CASCADE)
+    text = models.CharField(max_length=200)
+
+    class Meta:
+        unique_together = [['user', 'phonecase', 'text']]

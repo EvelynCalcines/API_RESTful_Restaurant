@@ -4,14 +4,41 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 
 # waning_moon_design imports
-from .models import User
+from .models import User, Comment
+from phone_case.models import ColorType, PhoneCase
+
+
+class ListPhoneCaseSerializer(serializers.ModelSerializer):
+
+    color = serializers.ChoiceField(choices=ColorType.choices, source='get_color_display')
+    is_favorite = serializers.SerializerMethodField()
+    favorites = serializers.SerializerMethodField()
+
+    class Meta:
+        model = PhoneCase
+        exclude = ["created_at", "updated_at", "deleted_at", "active", "user"]
+
+    def get_is_favorite(self, obj):
+        return obj.is_favorite(self.context["request"].user)
+
+    def get_favorites(self, obj):
+        return obj.favorites()
 
 
 class UserSerializer(serializers.ModelSerializer):
 
+    favorites = ListPhoneCaseSerializer(many=True)
+
     class Meta:
         model = User
         exclude = ['password']
+
+
+class UserLoginSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        exclude = ["password"]
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -46,7 +73,7 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(write_only=True)
     token = serializers.SerializerMethodField()
-    user = UserProfileSerializer(read_only=True)
+    user = UserLoginSerializer(read_only=True)
 
     def get_token(self, obj):
         user = obj['user']
@@ -70,3 +97,17 @@ class LoginSerializer(serializers.Serializer):
             }
         else:
             raise serializers.ValidationError('Invalid credentials')
+
+
+class CommentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = "__all__"
+
+
+class UpdateCommentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = ("text",)

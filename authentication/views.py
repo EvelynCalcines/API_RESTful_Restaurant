@@ -9,8 +9,15 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import mixins, GenericViewSet
 
 # waning_moon_design imports
-from .models import User
-from .serializers import (RegistrationSerializer, UserProfileSerializer, LoginSerializer, UserSerializer)
+from .models import User, Comment
+from .serializers import (
+    RegistrationSerializer,
+    UserProfileSerializer,
+    LoginSerializer,
+    UserSerializer,
+    CommentSerializer,
+    UpdateCommentSerializer
+)
 
 
 class RegisterViewSet(mixins.CreateModelMixin, GenericViewSet):
@@ -37,7 +44,6 @@ class UserLoginView(APIView):
 
 
 class UserViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
-
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
     filter_backends = [SearchFilter, OrderingFilter, django_filters.rest_framework.DjangoFilterBackend]
@@ -77,4 +83,38 @@ class UserViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewS
     def get_serializer_class(self):
         if self.action == 'me':
             return UserSerializer
+        return self.serializer_class
+
+
+class CommentViewSet(
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    mixins.UpdateModelMixin,
+    GenericViewSet
+):
+
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    filter_backends = [SearchFilter, OrderingFilter, django_filters.rest_framework.DjangoFilterBackend]
+
+    filterset_fields = {
+        "user__id": ["isnull", "exact"],
+        "phonecase__id": ["isnull", "exact"],
+    }
+
+    search_fields = ['user__id']
+    ordering_fields = ['user__email']
+
+    def create(self, request, *args, **kwargs):
+        request.data['user'] = request.user.id
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def get_serializer_class(self):
+        if self.action in ("update", "partial_update"):
+            return UpdateCommentSerializer
         return self.serializer_class

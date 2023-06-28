@@ -9,16 +9,21 @@ from rest_framework.viewsets import GenericViewSet
 
 # waning_moon_design imports
 from phone_case.models import PhoneCase
-from .serializers import (UpdatePhoneCaseSerializer,
-                          ListPhoneCaseSerializer,
-                          CreatePhoneCaseSerializer,
-                          ListProfilePhoneCaseSerializer)
+from .serializers import (
+    UpdatePhoneCaseSerializer,
+    ListPhoneCaseSerializer,
+    CreatePhoneCaseSerializer,
+    ListProfilePhoneCaseSerializer
+)
 
 
-class PhoneCaseViewSet(mixins.CreateModelMixin,
-                       mixins.RetrieveModelMixin,
-                       mixins.ListModelMixin,
-                       GenericViewSet):
+class PhoneCaseViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet
+):
+
     queryset = PhoneCase.objects.all()
     serializer_class = ListPhoneCaseSerializer
     lookup_field = 'id'
@@ -67,7 +72,6 @@ class MePhoneCaseView(mixins.UpdateModelMixin,
                       mixins.DestroyModelMixin,
                       mixins.ListModelMixin,
                       GenericViewSet):
-
     queryset = PhoneCase.objects.all()
     serializer_class = ListProfilePhoneCaseSerializer
     lookup_field = "id"
