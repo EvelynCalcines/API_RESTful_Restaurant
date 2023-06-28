@@ -10,10 +10,18 @@ class ListPhoneCaseSerializer(serializers.ModelSerializer):
 
     color = serializers.ChoiceField(choices=ColorType.choices, source='get_color_display')
     user = UserProfileSerializer()
+    is_favorite = serializers.SerializerMethodField()
+    favorites = serializers.SerializerMethodField()
 
     class Meta:
         model = PhoneCase
         exclude = ["created_at", "updated_at", "deleted_at", "active"]
+
+    def get_is_favorite(self, obj):
+        return self.context["request"].user.is_favorite(obj)
+
+    def get_favorites(self, obj):
+        return obj.favorites()
 
 
 class ListProfilePhoneCaseSerializer(serializers.ModelSerializer):

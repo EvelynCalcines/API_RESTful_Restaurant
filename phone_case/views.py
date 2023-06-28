@@ -1,7 +1,9 @@
 # Django and DRF imports
 import django_filters
 from rest_framework import status, mixins
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
@@ -28,6 +30,13 @@ class PhoneCaseViewSet(mixins.CreateModelMixin,
     search_fields = ['name']
     ordering_fields = ['brand']
 
+    def get_permissions(self):
+        if self.action == 'create':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
     def create(self, request, *args, **kwargs):
         request.data['user'] = request.user.id
         serializer = self.get_serializer(data=request.data)
@@ -40,6 +49,18 @@ class PhoneCaseViewSet(mixins.CreateModelMixin,
         if self.action == "create":
             return CreatePhoneCaseSerializer
         return self.serializer_class
+
+    @action(detail=True, methods=['POST'])
+    def favorite(self, request, id):
+        phonecase = self.get_object()
+        self.request.user.favorite(phonecase)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=['POST'])
+    def unfavorite(self, request, id):
+        phonecase = self.get_object()
+        self.request.user.unfavorite(phonecase)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class MePhoneCaseView(mixins.UpdateModelMixin,

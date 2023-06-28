@@ -49,3 +49,9 @@ class PhoneCase(BaseModel):
 
     def __str__(self):
         return f"{self.name}"
+
+    def is_favorite(self, user):
+        return self.favorites_by.filter(id=user.id).exists()
+
+    def favorites(self):
+        return self.favorites_by.count()
