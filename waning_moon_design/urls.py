@@ -29,5 +29,5 @@ urlpatterns = [
     url('api/', include('authentication.urls')),
     url('api/', include('electrical_exercises.urls')),
     url('api/', include('exercises2.urls')),
-
+    url('api/', include('new_activity_sept2023.urls')),
 ]

@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'phone_case',
     'authentication',
     'electrical_exercises',
-    'exercises2'
+    'exercises2',
+    'new_activity_sept2023'
 ]
 
 MIDDLEWARE = [
