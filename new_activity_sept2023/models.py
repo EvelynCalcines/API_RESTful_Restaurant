@@ -13,7 +13,6 @@ class Workshop(BaseModel):
     name = models.CharField(max_length=20)
     address = models.CharField(max_length=20)
     cif = models.CharField(max_length=20)
-    workshop_workers = models.ManyToManyField('Worker', related_name='workshops', blank=True)
 
     class Meta:
         verbose_name = "Workshop"
@@ -56,7 +55,7 @@ class Car(BaseModel):
 class Repair(BaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date_time = models.DateTimeField()
-    worker = models.ForeignKey(Worker, on_delete=models.CASCADE)
+    workers = models.ManyToManyField('Worker', related_name='repairs')
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
 
     class Meta:
@@ -64,4 +63,4 @@ class Repair(BaseModel):
         verbose_name_plural = "Repairs"
 
     def __str__(self):
-        return f"Repair on {self.date_time} by {self.worker} for {self.car}"
+        return f"Repair on {self.date_time} for {self.car}"

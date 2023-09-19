@@ -1,4 +1,6 @@
 # Django and DRF imports
+import django_filters
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
@@ -17,6 +19,13 @@ class WorkshopViewSet(ModelViewSet):
     queryset = Workshop.objects.all()
     serializer_class = WorkshopSerializer
     lookup_field = 'id'
+    filter_backends = [SearchFilter, OrderingFilter, django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = {
+        "name": ["icontains", "exact", "istartswith"],
+        "cif": ["istartswith", "exact", "icontains"],
+    }
+    search_fields = ['name']
+    ordering_fields = ['address']
 
 
 class WorkerViewSet(mixins.CreateModelMixin,
@@ -28,6 +37,13 @@ class WorkerViewSet(mixins.CreateModelMixin,
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
     lookup_field = 'id'
+    filter_backends = [SearchFilter, OrderingFilter, django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = {
+        "name": ["icontains", "exact", "istartswith"],
+        "dni": ["istartswith", "exact", "icontains"],
+    }
+    search_fields = ['name']
+    ordering_fields = ['dni']
 
 
 class CarViewSet(mixins.CreateModelMixin,
@@ -39,6 +55,15 @@ class CarViewSet(mixins.CreateModelMixin,
     queryset = Car.objects.all()
     serializer_class = CarSerializer
     lookup_field = 'id'
+    filter_backends = [SearchFilter, OrderingFilter, django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = {
+        "car_license_plate": ["lt", "exact", "gt"],
+        "brand": ["exact", "istartswith"],
+        "model": ["exact", "istartswith"],
+
+    }
+    search_fields = ['brand']
+    ordering_fields = ['model']
 
 
 class RepairViewSet(mixins.CreateModelMixin,
@@ -49,3 +74,9 @@ class RepairViewSet(mixins.CreateModelMixin,
     queryset = Repair.objects.all()
     serializer_class = RepairSerializer
     lookup_field = 'id'
+    filter_backends = [SearchFilter, OrderingFilter, django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = {
+        "date_time": ["exact"],
+    }
+    search_fields = ['car__car_license_plate']
+    ordering_fields = ['date_time']

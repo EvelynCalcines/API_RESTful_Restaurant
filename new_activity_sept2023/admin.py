@@ -40,5 +40,5 @@ class RepairAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return self.model.all_objects.get_queryset()
 
-    list_display = ('worker', 'car', 'date_time', 'id',
+    list_display = ('car', 'date_time', 'id',
                     'created_at', 'updated_at', 'deleted_at', 'active')
