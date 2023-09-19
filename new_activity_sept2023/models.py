@@ -55,7 +55,7 @@ class Car(BaseModel):
 class Repair(BaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date_time = models.DateTimeField()
-    workers = models.ManyToManyField('Worker', related_name='repairs')
+    workers = models.ManyToManyField('Worker', related_name='repairs')  # Muchos a muchos
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
 
     class Meta:
