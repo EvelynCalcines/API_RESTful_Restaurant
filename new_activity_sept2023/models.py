@@ -10,9 +10,9 @@ from utils.models import BaseModel
 
 class Workshop(BaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=20)
-    address = models.CharField(max_length=20)
-    cif = models.CharField(max_length=20)
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=100)
+    cif = models.CharField(max_length=50)
 
     class Meta:
         verbose_name = "Workshop"
@@ -24,9 +24,9 @@ class Workshop(BaseModel):
 
 class Worker(BaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
     number_phone = models.IntegerField(null=True, blank=True)
-    dni = models.CharField(max_length=20, unique=True)
+    dni = models.CharField(max_length=20)
     workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE, related_name='workers')
 
     class Meta:

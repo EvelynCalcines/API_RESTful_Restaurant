@@ -31,6 +31,21 @@ class CarSerializer(serializers.ModelSerializer):
 
 class RepairSerializer(serializers.ModelSerializer):
 
+    car = serializers.PrimaryKeyRelatedField(queryset=Car.objects.all())
+    workers = serializers.PrimaryKeyRelatedField(many=True, queryset=Worker.objects.all())
+
     class Meta:
         model = Repair
         fields = "__all__"
+
+
+class RepairWorkerCarSerializer(serializers.ModelSerializer):
+
+    car = CarSerializer()
+    workers = WorkerSerializer(many=True)
+
+    class Meta:
+        model = Repair
+        fields = "__all__"
+
+

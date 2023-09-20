@@ -40,5 +40,10 @@ class RepairAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return self.model.all_objects.get_queryset()
 
-    list_display = ('car', 'date_time', 'id',
+    def get_workers_info(self, obj):
+        return ", ".join([worker.name for worker in obj.workers.all()])
+
+    get_workers_info.short_description = "Workers"
+
+    list_display = ('car', 'date_time', 'id', 'get_workers_info',
                     'created_at', 'updated_at', 'deleted_at', 'active')
