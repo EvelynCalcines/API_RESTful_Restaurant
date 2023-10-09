@@ -26,8 +26,7 @@ urlpatterns = [
 
     url('api/', include('phone_case.urls')),
     url('api/', include('utils.urls')),
+    url('api/', include('restaurant_technical_test.urls')),
     url('api/', include('authentication.urls')),
-    url('api/', include('electrical_exercises.urls')),
-    url('api/', include('exercises2.urls')),
-    url('api/', include('new_activity_sept2023.urls')),
+
 ]

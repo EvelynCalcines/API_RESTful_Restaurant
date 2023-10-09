@@ -45,10 +45,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_filters',
     'phone_case',
+    'restaurant_technical_test',
     'authentication',
-    'electrical_exercises',
-    'exercises2',
-    'new_activity_sept2023'
 ]
 
 MIDDLEWARE = [
