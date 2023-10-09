@@ -1,6 +1,6 @@
 # Proyecto API_RESTful_Restaurant - Mi Prueba Técnica
 
-Este proyecto consiste en una API RESTful que cumple con los requisitos de una prueba técnica. La API permite realizar operaciones CRUD para gestionar restaurantes.
+Este proyecto consiste en una API RESTful que cumple con los requisitos de una prueba técnica. La API permite realizar operaciones CRUD para almacenar y gestionar restaurantes (nombre, dirección y número de teléfono).
 
 ## Configuración y Ejecución
 
