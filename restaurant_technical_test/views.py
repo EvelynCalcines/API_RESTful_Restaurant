@@ -45,7 +45,8 @@ class RestaurantViewSet(ModelViewSet):
         except serializers.ValidationError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as _:
-            return Response({"error": "Error al crear el restaurante"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": "Error al crear el restaurante"},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def update(self, request, *args, **kwargs):
         try:
@@ -55,7 +56,8 @@ class RestaurantViewSet(ModelViewSet):
             serializer.save()
             return Response(serializer.data)
         except Exception as _:
-            return Response({"error": "Error al actualizar el restaurante"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": "Error al actualizar el restaurante"},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def destroy(self, request, *args, **kwargs):
         try:
@@ -63,4 +65,5 @@ class RestaurantViewSet(ModelViewSet):
             instance.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Exception as _:
-            return Response({"error": "Error al eliminar el restaurante"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": "Error al eliminar el restaurante"},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
