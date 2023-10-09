@@ -36,7 +36,7 @@ class RestaurantViewSet(ModelViewSet):
         try:
             data = request.data
             # Validación: Asegurarse de que el teléfono tenga un formato válido
-            if not data.get('phone').isdigit() or len(data.get('phone')) != 10:
+            if not data.get('phone').isdigit() or len(data.get('phone')) != 9:
                 raise serializers.ValidationError("El número de teléfono no es válido")
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
